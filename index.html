@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Jardín Intuitivo - Conectado</title>
+    <script src="https://jsdelivr.net"></script>
+    <link href="https://googleapis.com" rel="stylesheet">
+    <style>
+        body { margin: 0; font-family: 'Poppins', sans-serif; background: #2e7d32 url('jardin1.jpeg') no-repeat center center fixed; background-size: cover; overflow: hidden; }
+        
+        /* 🌸 LOGIN / ENTRADA */
+        #pantalla-login {
+            position: fixed; width: 100%; height: 100%; background: rgba(0,0,0,0.7);
+            display: flex; justify-content: center; align-items: center; z-index: 1000; backdrop-filter: blur(10px);
+        }
+        .login-box {
+            background: white; padding: 40px; border-radius: 20px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        input { padding: 10px; margin: 10px; border-radius: 5px; border: 1px solid #ccc; width: 80%; }
+        
+        /* 🌿 JUEGO */
+        #juego-contenedor { display: none; text-align: center; padding-top: 20px; }
+        #game-container { width: 800px; height: 500px; margin: auto; border: 5px solid white; border-radius: 20px; background: rgba(255,255,255,0.1); }
+        
+        .controles { margin-top: 20px; }
+        button { padding: 15px 30px; border-radius: 50px; border: none; background: #2e7d32; color: white; cursor: pointer; font-weight: bold; font-size: 16px; transition: 0.3s; }
+        button:hover { transform: scale(1.1); background: #388e3c; }
+
+        /* 🍃 HOJAS */
+        .petalo { position: fixed; top: -50px; width: 30px; height: 30px; background: url('petalo.png') no-repeat center; background-size: contain; animation: caer linear infinite; pointer-events: none; z-index: 500; }
+        @keyframes caer { to { transform: translateY(100vh) rotate(360deg); } }
+    </style>
+</head>
+<body>
+
+    <!-- 🌸 LOGIN -->
+    <div id="pantalla-login">
+        <div class="login-box">
+            <h2>🌱 Bienvenido al Jardín</h2>
+            <p>Introduce tu nombre de jardinero:</p>
+            <input type="text" id="nombreUsuario" placeholder="Tu nombre...">
+            <br>
+            <button onclick="entrarAlJardin()">✨ ENTRAR</button>
+        </div>
+    </div>
+
+    <!-- 🌿 JARDÍN -->
+    <div id="juego-contenedor">
+        <div id="game-container"></div>
+        <div class="controles">
+            <button onclick="accion('agua')">💧 Regar</button>
+            <button onclick="accion('sol')">☀️ Sol</button>
+            <button onclick="accion('abono')">🌿 Abono</button>
+        </div>
+    </div>
+
+    <script>
+        // 1. LÓGICA DE LOGIN
+        function entrarAlJardin() {
+            let nombre = document.getElementById('nombreUsuario').value;
+            if(nombre.length > 2) {
+                document.getElementById('pantalla-login').style.display = 'none';
+                document.getElementById('juego-contenedor').style.display = 'block';
+                iniciarPhaser();
+            } else {
+                alert("Por favor, escribe un nombre válido.");
+            }
+        }
+
+        // 2. PARTÍCULAS (Hojas)
+        setInterval(() => {
+            let p = document.createElement("div"); p.className = "petalo";
+            p.style.left = Math.random() * window.innerWidth + "px";
+            p.style.animationDuration = (4 + Math.random() * 4) + "s";
+            document.body.appendChild(p); setTimeout(() => p.remove(), 8000);
+        }, 500);
+
+        // 3. JUEGO PHASER (Flores dibujadas por código)
+        var estado = { agua: 0, sol: 0 };
+        var flores = [];
+
+        function iniciarPhaser() {
+            const config = {
+                type: Phaser.AUTO, parent: 'game-container', width: 800, height: 500, transparent: true,
+                scene: { create: create, update: update }
+            };
+            new Phaser.Game(config);
+        }
+
+        function create() {
+            window.escena = this;
+            const colores = [0xffff00, 0xff4444, 0xff00ff]; // Amarillo, Rojo, Rosa
+            
+            for(let i = 0; i < 3; i++) {
+                let container = this.add.container(200 + (i * 200), 400);
+                
+                // Tallo verde
+                let tallo = this.add.rectangle(0, 0, 15, 100, 0x388e3c).setOrigin(0.5, 1);
+                
+                // Pétalos (Círculos grandes)
+                let flor = this.add.circle(0, -100, 35, colores[i]);
+                let centro = this.add.circle(0, -100, 12, 0xffca28);
+                
+                container.add([tallo, flor, centro]);
+                flores.push({ obj: container, crecida: false });
+            }
+        }
+
+        function update() {
+            if (estado.agua > 20) {
+                flores.forEach(f => {
+                    if(!f.crecida) {
+                        this.tweens.add({ targets: f.obj, scale: 1.5, duration: 1000, ease: 'Bounce' });
+                        f.crecida = true;
+                    }
+                });
+            }
+            if (estado.sol > 40) {
+                flores.forEach(f => { f.obj.setAlpha(0.5); f.obj.angle = 20; });
+            }
+        }
+
+        function accion(tipo) {
+            if(tipo === 'agua') {
+                estado.agua += 5;
+                window.escena.cameras.main.flash(200, 100, 200, 255);
+            }
+            if(tipo === 'sol') estado.sol += 5;
+        }
+    </script>
+</body>
+</html>
