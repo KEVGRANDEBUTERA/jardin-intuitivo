@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌱 Jardín Intuitivo</title>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 50%, #388e3c 100%);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* 🌸 PANTALLA LOGIN */
+        #pantalla-login {
+            position: fixed; 
+            width: 100%; 
+            height: 100%; 
+            background: radial-gradient(circle, rgba(46,125,50,0.9), rgba(27,94,32,0.95));
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .login-container {
+            text-align: center;
+            animation: fadeInDown 0.8s ease-out;
+            width: 100%;
+        }
+
+        .login-box {
+            background: rgba(255,255,255,0.95);
+            padding: 30px 25px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            max-width: 400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .login-box h1 {
+            font-size: clamp(28px, 7vw, 40px);
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #2e7d32, #66bb6a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .login-box p {
+            font-size: clamp(13px, 3.5vw, 15px);
+            color: #555;
+            margin-bottom: 25px;
+            font-weight: 300;
+        }
+
+        .input-group {
+            position: relative;
+            margin: 15px 0;
+        }
+
+        #nombreUsuario {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: clamp(13px, 3.5vw, 15px);
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s;
+            background: #f5f5f5;
+        }
+
+        #nombreUsuario:focus {
+            outline: none;
+            border-color: #66bb6a;
+            background: white;
+            box-shadow: 0 0 10px rgba(102, 187, 106, 0.3);
+        }
+
+        .btn-entrar {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #2e7d32, #66bb6a);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: clamp(14px, 3.5vw, 16px);
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 15px;
+            box-shadow: 0 5px 15px rgba(46, 125, 50, 0.3);
+        }
+
+        .btn-entrar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(46, 125, 50, 0.5);
+        }
+
+        /* 🎮 JUEGO */
+        #juego-contenedor {
+            display: none;
+            width: 100%;
+            height: 100vh;
+            flex-direction: column;
+            background: linear-gradient(180deg, #1b5e20 0%, #2e7d32 50%, #1b5e20 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 📊 HUD - INFORMACIÓN */
+        #hud {
+            background: rgba(0,0,0,0.3);
+            padding: clamp(8px, 2vw, 15px) clamp(12px, 4vw, 30px);
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(85px, 1fr));
+            gap: clamp(6px, 1.5vw, 12px);
+            border-bottom: 2px solid rgba(102, 187, 106, 0.5);
+            backdrop-filter: blur(10px);
+            max-height: 85px;
+            overflow-y: auto;
+        }
+
+        .hud-item {
+            color: white;
+            font-size: clamp(11px, 2.5vw, 15px);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .hud-item span {
+            background: rgba(102, 187, 106, 0.3);
+            padding: 4px 10px;
+            border-radius: 18px;
+            border: 1.5px solid #66bb6a;
+            white-space: nowrap;
+            font-size: clamp(10px, 2.5vw, 13px);
+        }
+
+        /* 🌿 ÁREA DE JUEGO */
+        #game-container {
+            flex: 1;
+            width: 100%;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 150px;
+        }
+
+        /* 🎨 CONTROLES INTUITIVOS */
+        .controles-intuitivos {
+            position: fixed;
+            bottom: clamp(15px, 3vw, 30px);
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: clamp(8px, 1.5vw, 15px);
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            background: rgba(0,0,0,0.2);
+            padding: clamp(10px, 1.5vw, 16px) clamp(12px, 2.5vw, 24px);
+            border-radius: 25px;
+            border: 2px solid rgba(102, 187, 106, 0.4);
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 95vw;
+        }
+
+        .btn-accion {
+            width: clamp(50px, 12vw, 65px);
+            height: clamp(50px, 12vw, 65px);
+            border: none;
+            border-radius: 50%;
+            font-size: clamp(20px, 5vw, 28px);
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+            min-width: 50px;
+            min-height: 50px;
+        }
+
+        .btn-accion::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.2);
+            transition: left 0.3s;
+        }
+
+        .btn-accion:hover::before {
+            left: 100%;
+        }
+
+        .btn-accion:hover {
+            transform: scale(1.1);
+        }
+
+        .btn-accion:active {
+            transform: scale(0.95);
+        }
+
+        /* Colores únicos */
+        .btn-agua {
+            background: linear-gradient(135deg, #1976d2, #42a5f5);
+            color: white;
+        }
+
+        .btn-sol {
+            background: linear-gradient(135deg, #fbc02d, #fdd835);
+            color: #333;
+        }
+
+        .btn-abono {
+            background: linear-gradient(135deg, #8d6e63, #a1887f);
+            color: white;
+        }
+
+        .btn-caricia {
+            background: linear-gradient(135deg, #c2185b, #f06292);
+            color: white;
+        }
+
+        /* 🍃 PARTÍCULAS */
+        .particula {
+            position: fixed;
+            pointer-events: none;
+            font-size: clamp(14px, 3.5vw, 20px);
+            font-weight: bold;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        /* ⚠️ ALERTA */
+        .alerta {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.95);
+            color: white;
+            padding: clamp(15px, 4vw, 30px);
+            border-radius: 15px;
+            text-align: center;
+            font-size: clamp(16px, 4.5vw, 24px);
+            z-index: 2000;
+            display: none;
+            animation: popIn 0.4s ease-out;
+            max-width: 90vw;
+            font-weight: bold;
+            border: 3px solid #66bb6a;
+        }
+
+        .alerta.muerte {
+            background: rgba(200, 0, 0, 0.95) !important;
+            border-color: #ff4444 !important;
+            animation: temblequeo 0.1s infinite !important;
+            font-size: clamp(20px, 6vw, 30px) !important;
+        }
+
+        /* 🌾 FIN DE JUEGO */
+        #modal-fin {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 3000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.5s;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .modal-contenido {
+            background: linear-gradient(135deg, #1b5e20, #2e7d32);
+            color: white;
+            padding: clamp(25px, 4vw, 40px);
+            border-radius: 20px;
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+            border: 3px solid #66bb6a;
+        }
+
+        .modal-contenido h1 {
+            font-size: clamp(28px, 7vw, 40px);
+            margin-bottom: 15px;
+        }
+
+        .modal-contenido p {
+            font-size: clamp(14px, 3.5vw, 18px);
+            margin: 12px 0;
+            line-height: 1.6;
+        }
+
+        .modal-stats {
+            background: rgba(102, 187, 106, 0.2);
+            padding: clamp(12px, 2.5vw, 18px);
+            border-radius: 12px;
+            margin: 18px 0;
+            border: 2px solid #66bb6a;
+        }
+
+        .modal-stats p {
+            font-size: clamp(12px, 3vw, 16px);
+            margin: clamp(6px, 1.5vw, 10px) 0;
+        }
+
+        .btn-reiniciar {
+            background: linear-gradient(135deg, #66bb6a, #81c784);
+            color: white;
+            border: none;
+            padding: clamp(10px, 2.5vw, 13px) clamp(25px, 4vw, 35px);
+            border-radius: 12px;
+            font-size: clamp(14px, 3.5vw, 16px);
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s;
+        }
+
+        .btn-reiniciar:hover {
+            transform: scale(1.05);
+        }
+
+        @keyframes popIn {
+            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+
+        @keyframes temblequeo {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            25% { transform: translate(-50%, -50%) rotate(-2deg); }
+            75% { transform: translate(-50%, -50%) rotate(2deg); }
+            100% { transform: translate(-50%, -50%) rotate(0deg); }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* 📱 RESPONSIVE MÓVIL */
+        @media (max-width: 768px) {
+            #hud {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 6px;
+                padding: 8px;
+            }
+
+            .hud-item {
+                font-size: 11px;
+                flex-direction: column;
+            }
+
+            .hud-item span {
+                font-size: 12px;
+                padding: 3px 8px;
+            }
+
+            .controles-intuitivos {
+                bottom: 12px;
+                gap: 8px;
+                padding: 8px;
+            }
+
+            .btn-accion {
+                width: 55px;
+                height: 55px;
+                font-size: 22px;
+                min-width: 55px;
+                min-height: 55px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .controles-intuitivos {
+                bottom: 10px;
+                gap: 6px;
+                padding: 6px;
+                border-radius: 18px;
+            }
+
+            .btn-accion {
+                width: 48px;
+                height: 48px;
+                font-size: 20px;
+                min-width: 48px;
+                min-height: 48px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            }
+
+            #hud {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 4px;
+                padding: 6px;
+                max-height: 80px;
+            }
+
+            .hud-item {
+                font-size: 10px;
+            }
+
+            .login-box {
+                padding: 25px 18px;
+                border-radius: 15px;
+            }
+
+            .modal-contenido {
+                padding: 20px 12px;
+                border-radius: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 🌸 LOGIN -->
+    <div id="pantalla-login">
+        <div class="login-container">
+            <div class="login-box">
+                <h1>🌱 Jardín Intuitivo</h1>
+                <p>Conecta con la naturaleza a través de tus sentidos</p>
+                <div class="input-group">
+                    <input type="text" id="nombreUsuario" placeholder="¿Cuál es tu nombre?" maxlength="20">
+                </div>
+                <button class="btn-entrar" onclick="entrarAlJardin()">✨ COMENZAR</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🌿 JUEGO -->
+    <div id="juego-contenedor">
+        <!-- HUD -->
+        <div id="hud">
+            <div class="hud-item">
+                👨‍🌾 <span id="nombre-jugador">Jardinero</span>
+            </div>
+            <div class="hud-item">
+                🌸 <span id="flores-vivas">3</span>
+            </div>
+            <div class="hud-item">
+                💚 <span id="energia-label">100%</span>
+            </div>
+            <div class="hud-item">
+                ⏱️ <span id="tiempo-juego">0:00</span>
+            </div>
+        </div>
+
+        <!-- JUEGO -->
+        <div id="game-container"></div>
+    </div>
+
+    <!-- CONTROLES INTUITIVOS -->
+    <div class="controles-intuitivos" id="controles">
+        <button class="btn-accion btn-agua" onclick="accion('agua')" title="Regar">💧</button>
+        <button class="btn-accion btn-sol" onclick="accion('sol')" title="Sol">☀️</button>
+        <button class="btn-accion btn-abono" onclick="accion('abono')" title="Abono">🌿</button>
+        <button class="btn-accion btn-caricia" onclick="accion('caricia')" title="Caricia">🤚</button>
+    </div>
+
+    <!-- ALERTA -->
+    <div class="alerta" id="alerta"></div>
+
+    <!-- MODAL FIN -->
+    <div id="modal-fin">
+        <div class="modal-contenido">
+            <h1 id="titulo-fin">🌾 Fin del Viaje 🌾</h1>
+            <p id="mensaje-fin">Tu jardín ha descansado...</p>
+            <div class="modal-stats">
+                <p id="stat-1">Flores: 0</p>
+                <p id="stat-2">Tiempo: 0:00</p>
+                <p id="stat-3">Conexión: 0%</p>
+                <p style="font-size: clamp(16px, 4vw, 22px); margin-top: 12px; color: #81c784;">
+                    <strong id="puntuacion-final">🏆 0 pts</strong>
+                </p>
+            </div>
+            <button class="btn-reiniciar" onclick="location.reload()">🔄 Jugar</button>
+        </div>
+    </div>
+
+    <script>
+        let nombreJugador = '';
+        let flores = [];
+        let escena = null;
+        let estado = { agua: 0, sol: 0, abono: 0, caricia: 0, energia: 100 };
+        let tiempoInicio = 0;
+        let intervaloTiempo = null;
+        let juegoActivo = true;
+
+        function crearSonido(tipo) {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscilador = audioContext.createOscillator();
+                const ganancia = audioContext.createGain();
+                
+                oscilador.connect(ganancia);
+                ganancia.connect(audioContext.destination);
+                
+                ganancia.gain.setValueAtTime(0.1, audioContext.currentTime);
+                ganancia.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+
+                const frecuencias = {
+                    agua: 800,
+                    sol: 1200,
+                    abono: 600,
+                    caricia: 900
+                };
+
+                oscilador.frequency.value = frecuencias[tipo] || 800;
+                oscilador.start(audioContext.currentTime);
+                oscilador.stop(audioContext.currentTime + 0.3);
+            } catch(e) {
+                console.log("Audio no disponible");
+            }
+        }
+
+        function entrarAlJardin() {
+            nombreJugador = document.getElementById('nombreUsuario').value.trim();
+            if(nombreJugador.length > 2) {
+                document.getElementById('pantalla-login').style.display = 'none';
+                document.getElementById('juego-contenedor').style.display = 'flex';
+                document.getElementById('nombre-jugador').textContent = nombreJugador;
+                document.getElementById('controles').style.display = 'flex';
+                
+                tiempoInicio = Date.now();
+                iniciarTiempo();
+                setTimeout(() => iniciarPhaser(), 200);
+            } else {
+                alert("Escribe tu nombre (mínimo 3 caracteres)");
+            }
+        }
+
+        function iniciarTiempo() {
+            intervaloTiempo = setInterval(() => {
+                let elapsed = Math.floor((Date.now() - tiempoInicio) / 1000);
+                let min = Math.floor(elapsed / 60);
+                let seg = elapsed % 60;
+                document.getElementById('tiempo-juego').textContent = 
+                    min + ':' + (seg < 10 ? '0' : '') + seg;
+            }, 1000);
+        }
+
+        function iniciarPhaser() {
+            const ancho = window.innerWidth;
+            const alto = window.innerHeight - 100;
+
+            const config = {
+                type: Phaser.AUTO,
+                parent: 'game-container',
+                width: ancho,
+                height: alto,
+                transparent: true,
+                scene: {
+                    create: create,
+                    update: update
+                },
+                physics: {
+                    default: 'arcade',
+                    arcade: { debug: false }
+                }
+            };
+            new Phaser.Game(config);
+        }
+
+        function create() {
+            escena = this;
+            const colores = [0xff6b9d, 0xffd93d, 0x6bcf7f];
+            const nombres = ["🌹 Rosa", "🌻 Girasol", "🌺 Amapola"];
+            
+            const ancho = window.innerWidth;
+            const alto = window.innerHeight - 100;
+
+            for(let i = 0; i < 3; i++) {
+                let x = (ancho / 2) - 110 + (i * 110);
+                let y = alto - 90;
+
+                let container = this.add.container(x, y);
+                
+                // TALLO
+                let tallo = this.add.rectangle(0, 0, 8, 75, 0x388e3c).setOrigin(0.5, 1);
+                
+                // HOJAS
+                let hoja1 = this.add.ellipse(-12, -22, 20, 10, 0x66bb6a).setRotation(-0.3).setOrigin(0.5);
+                let hoja2 = this.add.ellipse(14, -38, 20, 10, 0x66bb6a).setRotation(0.4).setOrigin(0.5);
+
+                // FLOR
+                let flor = this.add.circle(0, -60, 28, colores[i]);
+                
+                // CENTRO
+                let centro = this.add.circle(0, -60, 9, 0xffca28);
+                
+                // NOMBRE
+                let texto = this.add.text(0, 30, nombres[i], {
+                    fontSize: '12px',
+                    fill: '#fff',
+                    fontStyle: 'bold',
+                    align: 'center',
+                    stroke: '#000',
+                    strokeThickness: 2
+                }).setOrigin(0.5);
+
+                // 🔧 BARRA DE SALUD CORRECTAMENTE CENTRADA
+                let barraAltura = 6;
+                let barraAncho = 60;
+                
+                // Fondo (gris) - CENTRADO
+                let barraFondo = this.add.rectangle(0, 50, barraAncho, barraAltura, 0x333333);
+                barraFondo.setOrigin(0.5, 0.5);
+                
+                // Barra de vida (verde) - CENTRADA Y DINÁMICA
+                let barraVida = this.add.rectangle(-barraAncho/2, 50, barraAncho, barraAltura, 0x66bb6a);
+                barraVida.setOrigin(0, 0.5);
+                
+                container.add([tallo, hoja1, hoja2, flor, centro, texto, barraFondo, barraVida]);
+
+                // INTERACTIVIDAD
+                flor.setInteractive();
+                flor.on('pointerdown', () => accion('caricia'));
+
+                flores.push({
+                    obj: container,
+                    flor: flor,
+                    barraVida: barraVida,
+                    barraFondo: barraFondo,
+                    salud: 100,
+                    nombre: nombres[i],
+                    indice: i,
+                    muerta: false,
+                    barraAncho: barraAncho
+                });
+            }
+
+            console.log("✅ Jardín creado con", flores.length, "flores");
+        }
+
+        function update() {
+            if (!escena || !juegoActivo) return;
+
+            flores.forEach(f => {
+                if(!f.muerta) {
+                    // Pérdida natural de salud
+                    f.salud -= 0.08;
+                    
+                    // Efectos de acciones
+                    if (estado.agua > 0) {
+                        f.salud += estado.agua * 0.5;
+                        estado.agua = 0;
+                    }
+                    if (estado.sol > 0) {
+                        f.salud += estado.sol * 0.3;
+                        estado.sol = 0;
+                    }
+                    if (estado.abono > 0) {
+                        f.salud += estado.abono * 0.8;
+                        estado.abono = 0;
+                    }
+                    if (estado.caricia > 0) {
+                        f.salud += estado.caricia * 0.2;
+                        estado.caricia = 0;
+                    }
+
+                    // Limitar salud
+                    f.salud = Math.max(0, Math.min(100, f.salud));
+
+                    // ACTUALIZAR BARRA - ✅ PERFECTAMENTE CENTRADA
+                    let colorBarra = f.salud > 60 ? 0x66bb6a : f.salud > 30 ? 0xfdd835 : 0xff6b9d;
+                    f.barraVida.setFillStyle(colorBarra);
+                    f.barraVida.width = (f.salud / 100) * f.barraAncho;
+
+                    // Escala de la flor
+                    let escala = 0.7 + (f.salud / 100) * 0.35;
+                    f.obj.setScale(escala);
+                    
+                    // Transparencia
+                    f.obj.setAlpha(0.4 + (f.salud / 100) * 0.6);
+
+                    // MUERTE
+                    if(f.salud <= 0 && !f.muerta) {
+                        f.muerta = true;
+                        f.obj.setTint(0x888888);
+                        mostrarAlertaMuerte(f.nombre);
+                        actualizarFloresVivas();
+                        
+                        if(contarFloresVivas() === 0) {
+                            finalizarJuego();
+                        }
+                    }
+                }
+            });
+        }
+
+        function accion(tipo) {
+            if(!juegoActivo) return;
+
+            crearSonido(tipo);
+            
+            const mensajes = {
+                agua: '💧 ¡Refrescante!',
+                sol: '☀️ ¡Energía vital!',
+                abono: '🌿 ¡Nutrientes!',
+                caricia: '❤️ ¡Amor!'
+            };
+
+            mostrarAlerta(mensajes[tipo]);
+
+            flores.forEach(f => { 
+                if(!f.muerta) {
+                    if(tipo === 'agua') f.salud += 15;
+                    if(tipo === 'sol') f.salud += 8;
+                    if(tipo === 'abono') f.salud += 25;
+                    if(tipo === 'caricia') f.salud += 3;
+                }
+            });
+
+            crearParticula(tipo);
+        }
+
+        function mostrarAlerta(texto) {
+            let alerta = document.getElementById('alerta');
+            alerta.classList.remove('muerte');
+            alerta.innerHTML = texto;
+            alerta.style.display = 'block';
+            setTimeout(() => {
+                alerta.style.display = 'none';
+            }, 600);
+        }
+
+        function mostrarAlertaMuerte(nombreFlor) {
+            let alerta = document.getElementById('alerta');
+            alerta.classList.add('muerte');
+            alerta.innerHTML = `💀 ${nombreFlor} ha marchitado...`;
+            alerta.style.display = 'block';
+            setTimeout(() => {
+                alerta.style.display = 'none';
+            }, 1200);
+        }
+
+        function crearParticula(tipo) {
+            let emojis = { agua: '💧', sol: '☀️', abono: '🌿', caricia: '❤️' };
+            let p = document.createElement('div');
+            p.className = 'particula';
+            p.textContent = emojis[tipo];
+            p.style.left = Math.random() * window.innerWidth + 'px';
+            p.style.top = window.innerHeight - 150 + 'px';
+            document.body.appendChild(p);
+
+            setTimeout(() => {
+                p.style.opacity = '0';
+                p.style.transform = 'translateY(-100px)';
+                setTimeout(() => p.remove(), 500);
+            }, 10);
+        }
+
+        function contarFloresVivas() {
+            return flores.filter(f => !f.muerta).length;
+        }
+
+        function actualizarFloresVivas() {
+            document.getElementById('flores-vivas').textContent = contarFloresVivas();
+        }
+
+        function finalizarJuego() {
+            juegoActivo = false;
+            clearInterval(intervaloTiempo);
+            document.getElementById('controles').style.display = 'none';
+
+            let tiempoTotal = Math.floor((Date.now() - tiempoInicio) / 1000);
+            let min = Math.floor(tiempoTotal / 60);
+            let seg = tiempoTotal % 60;
+            let tiempoFormato = min + ':' + (seg < 10 ? '0' : '') + seg;
+
+            let floresVivas = contarFloresVivas();
+            let puntuacion = (floresVivas * 500) + Math.floor(tiempoTotal / 10);
+
+            document.getElementById('stat-1').textContent = '🌸 Flores: ' + floresVivas + ' / 3';
+            document.getElementById('stat-2').textContent = '⏱️ Tiempo: ' + tiempoFormato;
+            document.getElementById('stat-3').textContent = '💚 Conexión: ' + Math.floor(estado.energia) + '%';
+            document.getElementById('puntuacion-final').textContent = '🏆 ' + puntuacion + ' pts';
+
+            if(floresVivas === 3) {
+                document.getElementById('titulo-fin').textContent = '🌟 ¡Maestro! 🌟';
+                document.getElementById('mensaje-fin').textContent = 'Cuidaste todo con amor';
+            } else if(floresVivas >= 1) {
+                document.getElementById('titulo-fin').textContent = '🌱 ¡Buen trabajo! 🌱';
+                document.getElementById('mensaje-fin').textContent = 'Mantuviste flores vivas';
+            } else {
+                document.getElementById('titulo-fin').textContent = '🍂 A practicar 🍂';
+                document.getElementById('mensaje-fin').textContent = 'Aprenderás con el tiempo';
+            }
+
+            setTimeout(() => {
+                document.getElementById('modal-fin').style.display = 'flex';
+            }, 1000);
+        }
+
+        // 🍃 PARTÍCULAS AMBIENTALES
+        setInterval(() => {
+            let p = document.createElement("div");
+            p.style.position = 'fixed';
+            p.style.pointerEvents = 'none';
+            p.style.fontSize = '18px';
+            p.textContent = ['🍃', '🌿', '🌾'][Math.floor(Math.random() * 3)];
+            p.style.left = Math.random() * window.innerWidth + 'px';
+            p.style.top = '-50px';
+            p.style.opacity = '0.6';
+            p.style.zIndex = '10';
+            document.body.appendChild(p);
+
+            let x = Math.random() * window.innerWidth;
+            setTimeout(() => {
+                p.style.top = window.innerHeight + 'px';
+                p.style.opacity = '0';
+                p.style.transform = 'translateX(' + (x - parseInt(p.style.left)) + 'px)';
+                setTimeout(() => p.remove(), 8000);
+            }, 10);
+        }, 2000);
+    </script>
+</body>
+</html>
