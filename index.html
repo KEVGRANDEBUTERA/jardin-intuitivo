@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌱 Jardín Intuitivo - Sensorial</title>
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 50%, #388e3c 100%);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* 🌸 PANTALLA LOGIN */
+        #pantalla-login {
+            position: fixed; 
+            width: 100%; 
+            height: 100%; 
+            background: radial-gradient(circle, rgba(46,125,50,0.9), rgba(27,94,32,0.95));
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            flex-direction: column;
+        }
+
+        .login-container {
+            text-align: center;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        .login-box {
+            background: rgba(255,255,255,0.95);
+            padding: 50px 40px;
+            border-radius: 30px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+            max-width: 500px;
+        }
+
+        .login-box h1 {
+            font-size: 48px;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #2e7d32, #66bb6a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .login-box p {
+            font-size: 16px;
+            color: #555;
+            margin-bottom: 30px;
+            font-weight: 300;
+        }
+
+        .input-group {
+            position: relative;
+            margin: 20px 0;
+        }
+
+        #nombreUsuario {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 15px;
+            font-size: 16px;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s;
+            background: #f5f5f5;
+        }
+
+        #nombreUsuario:focus {
+            outline: none;
+            border-color: #66bb6a;
+            background: white;
+            box-shadow: 0 0 10px rgba(102, 187, 106, 0.3);
+        }
+
+        .btn-entrar {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #2e7d32, #66bb6a);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(46, 125, 50, 0.3);
+        }
+
+        .btn-entrar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(46, 125, 50, 0.5);
+        }
+
+        .btn-entrar:active {
+            transform: translateY(0);
+        }
+
+        /* 🎮 JUEGO */
+        #juego-contenedor {
+            display: none;
+            width: 100%;
+            height: 100vh;
+            flex-direction: column;
+            background: linear-gradient(180deg, #1b5e20 0%, #2e7d32 50%, #1b5e20 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* 📊 HUD - INFORMACIÓN */
+        #hud {
+            background: rgba(0,0,0,0.3);
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 3px solid rgba(102, 187, 106, 0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        .hud-item {
+            color: white;
+            font-size: 18px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .hud-item span {
+            background: rgba(102, 187, 106, 0.3);
+            padding: 5px 15px;
+            border-radius: 20px;
+            border: 2px solid #66bb6a;
+        }
+
+        /* 🌿 ÁREA DE JUEGO */
+        #game-container {
+            flex: 1;
+            width: 100%;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* 🎨 CONTROLES INTUITIVOS */
+        .controles-intuitivos {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 20px;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            background: rgba(0,0,0,0.2);
+            padding: 20px 30px;
+            border-radius: 30px;
+            border: 2px solid rgba(102, 187, 106, 0.4);
+        }
+
+        .btn-accion {
+            width: 80px;
+            height: 80px;
+            border: none;
+            border-radius: 50%;
+            font-size: 32px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-accion::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(255,255,255,0.2);
+            transition: left 0.3s;
+        }
+
+        .btn-accion:hover::before {
+            left: 100%;
+        }
+
+        .btn-accion:hover {
+            transform: scale(1.15);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.5);
+        }
+
+        .btn-accion:active {
+            transform: scale(0.95);
+        }
+
+        /* Colores únicos para cada botón */
+        .btn-agua {
+            background: linear-gradient(135deg, #1976d2, #42a5f5);
+            color: white;
+        }
+
+        .btn-sol {
+            background: linear-gradient(135deg, #fbc02d, #fdd835);
+            color: #333;
+        }
+
+        .btn-abono {
+            background: linear-gradient(135deg, #8d6e63, #a1887f);
+            color: white;
+        }
+
+        .btn-caricia {
+            background: linear-gradient(135deg, #c2185b, #f06292);
+            color: white;
+        }
+
+        /* 🍃 PARTÍCULAS */
+        .particula {
+            position: fixed;
+            pointer-events: none;
+            font-size: 24px;
+            font-weight: bold;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        /* ⚠️ ALERTA */
+        .alerta {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0,0,0,0.9);
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            font-size: 24px;
+            z-index: 2000;
+            display: none;
+            animation: popIn 0.4s ease-out;
+        }
+
+        @keyframes popIn {
+            0% { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+            100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 🎙️ INSTRUCCIONES */
+        .instrucciones {
+            position: fixed;
+            bottom: 140px;
+            right: 30px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 15px;
+            font-size: 14px;
+            max-width: 250px;
+            border: 2px solid #66bb6a;
+            z-index: 50;
+        }
+
+        /* 🌾 FIN DE JUEGO */
+        #modal-fin {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            z-index: 3000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-contenido {
+            background: linear-gradient(135deg, #1b5e20, #2e7d32);
+            color: white;
+            padding: 50px;
+            border-radius: 25px;
+            text-align: center;
+            max-width: 600px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
+            border: 3px solid #66bb6a;
+        }
+
+        .modal-contenido h1 {
+            font-size: 48px;
+            margin-bottom: 30px;
+        }
+
+        .modal-contenido p {
+            font-size: 20px;
+            margin: 15px 0;
+            line-height: 1.6;
+        }
+
+        .modal-stats {
+            background: rgba(102, 187, 106, 0.2);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 30px 0;
+            border: 2px solid #66bb6a;
+        }
+
+        .btn-reiniciar {
+            background: linear-gradient(135deg, #66bb6a, #81c784);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+
+        .btn-reiniciar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(102, 187, 106, 0.4);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 🌸 LOGIN -->
+    <div id="pantalla-login">
+        <div class="login-container">
+            <div class="login-box">
+                <h1>🌱 Jardín Intuitivo</h1>
+                <p>Conecta con la naturaleza a través de tus sentidos</p>
+                <div class="input-group">
+                    <input type="text" id="nombreUsuario" placeholder="¿Cuál es tu nombre jardinero?" maxlength="20">
+                </div>
+                <button class="btn-entrar" onclick="entrarAlJardin()">✨ COMENZAR VIAJE</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🌿 JUEGO -->
+    <div id="juego-contenedor">
+        <!-- HUD -->
+        <div id="hud">
+            <div class="hud-item">
+                👨‍🌾 <span id="nombre-jugador">Jardinero</span>
+            </div>
+            <div class="hud-item">
+                🌸 Flores Vivas: <span id="flores-vivas">3</span>
+            </div>
+            <div class="hud-item">
+                💚 Energía: <span id="energia-label">100%</span>
+            </div>
+            <div class="hud-item">
+                ⏱️ Tiempo: <span id="tiempo-juego">0:00</span>
+            </div>
+        </div>
+
+        <!-- JUEGO -->
+        <div id="game-container"></div>
+
+        <!-- INSTRUCCIONES -->
+        <div class="instrucciones">
+            <strong>💡 Consejos:</strong><br>
+            • Toca las flores con tu cursor<br>
+            • Usa los botones para cuidarlas<br>
+            • Mantén el balance sensorial<br>
+            • Escucha los sonidos del jardín
+        </div>
+    </div>
+
+    <!-- CONTROLES INTUITIVOS -->
+    <div class="controles-intuitivos" id="controles">
+        <button class="btn-accion btn-agua" onclick="accion('agua')" title="Regar: Apaga la sed">💧</button>
+        <button class="btn-accion btn-sol" onclick="accion('sol')" title="Sol: Energía vital">☀️</button>
+        <button class="btn-accion btn-abono" onclick="accion('abono')" title="Abono: Nutrientes">🌿</button>
+        <button class="btn-accion btn-caricia" onclick="accion('caricia')" title="Caricia: Amor y cuidado">🤚</button>
+    </div>
+
+    <!-- ALERTA -->
+    <div class="alerta" id="alerta"></div>
+
+    <!-- MODAL FIN -->
+    <div id="modal-fin">
+        <div class="modal-contenido">
+            <h1 id="titulo-fin">🌾 Fin del Viaje 🌾</h1>
+            <p id="mensaje-fin">Tu jardín ha descansado...</p>
+            <div class="modal-stats">
+                <p>📊 <strong id="stat-1">Flores sobrevivientes: 0</strong></p>
+                <p>⏱️ <strong id="stat-2">Tiempo: 0:00</strong></p>
+                <p>💚 <strong id="stat-3">Conexión total: 0%</strong></p>
+                <p style="font-size: 28px; margin-top: 20px; color: #81c784;">
+                    <strong id="puntuacion-final">Puntuación: 0 puntos</strong>
+                </p>
+            </div>
+            <button class="btn-reiniciar" onclick="location.reload()">🔄 Jugar de Nuevo</button>
+        </div>
+    </div>
+
+    <script>
+        // 🎵 SONIDOS INTUITIVOS
+        function crearSonido(tipo) {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscilador = audioContext.createOscillator();
+            const ganancia = audioContext.createGain();
+            
+            oscilador.connect(ganancia);
+            ganancia.connect(audioContext.destination);
+            
+            ganancia.gain.setValueAtTime(0.1, audioContext.currentTime);
+            ganancia.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+
+            switch(tipo) {
+                case 'agua': 
+                    oscilador.frequency.value = 800;
+                    break;
+                case 'sol':
+                    oscilador.frequency.value = 1200;
+                    break;
+                case 'abono':
+                    oscilador.frequency.value = 600;
+                    break;
+                case 'caricia':
+                    oscilador.frequency.value = 900;
+                    break;
+            }
+
+            oscilador.start(audioContext.currentTime);
+            oscilador.stop(audioContext.currentTime + 0.3);
+        }
+
+        // 🎮 VARIABLES GLOBALES
+        let nombreJugador = '';
+        let flores = [];
+        let escena = null;
+        let estado = { agua: 0, sol: 0, abono: 0, caricia: 0, energia: 100 };
+        let tiempoInicio = 0;
+        let intervaloTiempo = null;
+        let juegoActivo = true;
+
+        // 🌸 LOGIN
+        function entrarAlJardin() {
+            nombreJugador = document.getElementById('nombreUsuario').value.trim();
+            if(nombreJugador.length > 2) {
+                document.getElementById('pantalla-login').style.display = 'none';
+                document.getElementById('juego-contenedor').style.display = 'flex';
+                document.getElementById('nombre-jugador').textContent = nombreJugador;
+                document.getElementById('controles').style.display = 'flex';
+                
+                tiempoInicio = Date.now();
+                iniciarTiempo();
+                setTimeout(() => iniciarPhaser(), 200);
+            } else {
+                alert("Por favor, escribe un nombre válido (mínimo 3 caracteres)");
+            }
+        }
+
+        // ⏱️ TIEMPO
+        function iniciarTiempo() {
+            intervaloTiempo = setInterval(() => {
+                let elapsed = Math.floor((Date.now() - tiempoInicio) / 1000);
+                let min = Math.floor(elapsed / 60);
+                let seg = elapsed % 60;
+                document.getElementById('tiempo-juego').textContent = 
+                    min + ':' + (seg < 10 ? '0' : '') + seg;
+            }, 1000);
+        }
+
+        // 🎮 PHASER
+        function iniciarPhaser() {
+            const config = {
+                type: Phaser.AUTO,
+                parent: 'game-container',
+                width: window.innerWidth,
+                height: window.innerHeight - 120,
+                transparent: true,
+                scene: {
+                    create: create,
+                    update: update
+                },
+                physics: {
+                    default: 'arcade',
+                    arcade: { debug: false }
+                }
+            };
+            const game = new Phaser.Game(config);
+        }
+
+        function create() {
+            escena = this;
+            const colores = [0xff6b9d, 0xffd93d, 0x6bcf7f];
+            const nombres = ["🌹 Rosa", "🌻 Girasol", "🌺 Amapola"];
+            
+            const ancho = window.innerWidth;
+            const alto = window.innerHeight - 120;
+
+            for(let i = 0; i < 3; i++) {
+                let x = (ancho / 4) + (i * (ancho / 3.5));
+                let y = alto - 80;
+
+                let container = this.add.container(x, y);
+                
+                // TALLO
+                let tallo = this.add.rectangle(0, 0, 12, 120, 0x388e3c).setOrigin(0.5, 1);
+                
+                // HOJAS
+                let hoja1 = this.add.ellipse(-20, -40, 30, 15, 0x66bb6a).setRotation(-0.3).setOrigin(0.5);
+                let hoja2 = this.add.ellipse(25, -60, 30, 15, 0x66bb6a).setRotation(0.4).setOrigin(0.5);
+
+                // PÉTALOS (círculos)
+                let flor = this.add.circle(0, -100, 40, colores[i]);
+                
+                // CENTRO
+                let centro = this.add.circle(0, -100, 15, 0xffca28);
+                
+                // NOMBRE
+                let texto = this.add.text(0, 50, nombres[i], {
+                    fontSize: '18px',
+                    fill: '#fff',
+                    fontStyle: 'bold',
+                    align: 'center',
+                    stroke: '#000',
+                    strokeThickness: 4
+                }).setOrigin(0.5);
+
+                // BARRA DE SALUD
+                let barraFondo = this.add.rectangle(0, 70, 100, 8, 0x333333).setOrigin(0.5);
+                let barraVida = this.add.rectangle(0, 70, 100, 8, 0x66bb6a).setOrigin(0);
+                
+                container.add([tallo, hoja1, hoja2, flor, centro, texto, barraFondo, barraVida]);
+
+                // INTERACTIVIDAD
+                flor.setInteractive().on('pointerover', () => {
+                    flor.setScale(1.1);
+                });
+                flor.on('pointerout', () => {
+                    flor.setScale(1);
+                });
+                flor.on('pointerdown', () => {
+                    accion('caricia');
+                });
+
+                flores.push({
+                    obj: container,
+                    flor: flor,
+                    barraVida: barraVida,
+                    salud: 100,
+                    nombre: nombres[i],
+                    indice: i,
+                    crecida: false,
+                    muerta: false
+                });
+            }
+
+            console.log("✅ Jardín creado:", flores.length, "flores");
+        }
+
+        function update() {
+            if (!escena || !juegoActivo) return;
+
+            // 🌍 LÓGICA DE SALUD
+            flores.forEach(f => {
+                if(!f.muerta) {
+                    // Pérdida natural de salud (hambre)
+                    f.salud -= 0.08;
+                    
+                    // Aplicar efectos
+                    if (estado.agua > 0) {
+                        f.salud += estado.agua * 0.5;
+                        estado.agua = 0;
+                    }
+                    if (estado.sol > 0) {
+                        f.salud += estado.sol * 0.3;
+                        estado.sol = 0;
+                    }
+                    if (estado.abono > 0) {
+                        f.salud += estado.abono * 0.8;
+                        estado.abono = 0;
+                    }
+                    if (estado.caricia > 0) {
+                        f.salud += estado.caricia * 0.2;
+                        estado.caricia = 0;
+                    }
+
+                    f.salud = Math.max(0, Math.min(100, f.salud));
+
+                    // ACTUALIZAR BARRA
+                    let colorBarra = f.salud > 60 ? 0x66bb6a : f.salud > 30 ? 0xfdd835 : 0xff6b9d;
+                    f.barraVida.setDisplayOrigin(0);
+                    f.barraVida.setFillStyle(colorBarra);
+                    f.barraVida.width = f.salud;
+
+                    // ESCALA
+                    let escala = 0.6 + (f.salud / 100) * 0.5;
+                    f.obj.setScale(escala);
+
+                    // ALPHA
+                    f.obj.setAlpha(0.3 + (f.salud / 100) * 0.7);
+
+                    // ROTACIÓN
+                    f.obj.setRotation((f.salud / 100) * 0.1 - 0.05);
+
+                    // MUERTE
+                    if(f.salud <= 0 && !f.muerta) {
+                        f.muerta = true;
+                        f.obj.setTint(0x888888);
+                        mostrarAlerta("💀 " + f.nombre + " ha marchitado...");
+                        actualizarFloresVivas();
+                        
+                        if(contarFloresVivas() === 0) {
+                            finalizarJuego();
+                        }
+                    }
+                }
+            });
+
+            // ENERGÍA
+            estado.energia = Math.max(0, estado.energia - 0.05);
+            document.getElementById('energia-label').textContent = Math.floor(estado.energia) + '%';
+        }
+
+        function accion(tipo) {
+            if(!juegoActivo) return;
+
+            crearSonido(tipo);
+            
+            let multiplier = 1;
+            
+            switch(tipo) {
+                case 'agua':
+                    mostrarAlerta('💧 Refrescante...');
+                    flores.forEach(f => { if(!f.muerta) f.salud += 15; });
+                    estado.agua = 15;
+                    break;
+                case 'sol':
+                    mostrarAlerta('☀️ Energía vital...');
+                    flores.forEach(f => { if(!f.muerta) f.salud += 8; });
+                    estado.sol = 8;
+                    break;
+                case 'abono':
+                    mostrarAlerta('🌿 Nutrientes...');
+                    flores.forEach(f => { if(!f.muerta) f.salud += 25; });
+                    estado.abono = 25;
+                    break;
+                case 'caricia':
+                    mostrarAlerta('🤚 Amor y cuidado...');
+                    flores.forEach(f => { if(!f.muerta) f.salud += 3; });
+                    estado.caricia = 3;
+                    break;
+            }
+
+            crearParticula(tipo);
+        }
+
+        function mostrarAlerta(texto) {
+            let alerta = document.getElementById('alerta');
+            alerta.innerHTML = texto;
+            alerta.style.display = 'block';
+            setTimeout(() => {
+                alerta.style.display = 'none';
+            }, 800);
+        }
+
+        function crearParticula(tipo) {
+            let emojis = { agua: '💧', sol: '☀️', abono: '🌿', caricia: '❤️' };
+            let p = document.createElement('div');
+            p.className = 'particula';
+            p.textContent = emojis[tipo];
+            p.style.left = Math.random() * window.innerWidth + 'px';
+            p.style.top = window.innerHeight - 200 + 'px';
+            document.body.appendChild(p);
+
+            let animate = () => {
+                p.style.opacity = '0';
+                p.style.transform = 'translateY(-100px)';
+                setTimeout(() => p.remove(), 500);
+            };
+            setTimeout(animate, 10);
+        }
+
+        function contarFloresVivas() {
+            return flores.filter(f => !f.muerta).length;
+        }
+
+        function actualizarFloresVivas() {
+            document.getElementById('flores-vivas').textContent = contarFloresVivas();
+        }
+
+        function finalizarJuego() {
+            juegoActivo = false;
+            clearInterval(intervaloTiempo);
+            document.getElementById('controles').style.display = 'none';
+
+            let tiempoTotal = Math.floor((Date.now() - tiempoInicio) / 1000);
+            let min = Math.floor(tiempoTotal / 60);
+            let seg = tiempoTotal % 60;
+            let tiempoFormato = min + ':' + (seg < 10 ? '0' : '') + seg;
+
+            let floresVivas = contarFloresVivas();
+            let puntuacion = (floresVivas * 500) + Math.floor(tiempoTotal / 10);
+
+            document.getElementById('stat-1').textContent = '🌸 Flores sobrevivientes: ' + floresVivas + ' / 3';
+            document.getElementById('stat-2').textContent = '⏱️ Tiempo: ' + tiempoFormato;
+            document.getElementById('stat-3').textContent = '💚 Conexión total: ' + Math.floor(estado.energia) + '%';
+            document.getElementById('puntuacion-final').textContent = '🏆 Puntuación: ' + puntuacion + ' puntos';
+
+            if(floresVivas === 3) {
+                document.getElementById('titulo-fin').textContent = '🌟 ¡Maestro del Jardín! 🌟';
+                document.getElementById('mensaje-fin').textContent = 'Has cuidado todas tus flores con amor y dedicación';
+            } else if(floresVivas >= 1) {
+                document.getElementById('titulo-fin').textContent = '🌱 Buen Trabajo 🌱';
+                document.getElementById('mensaje-fin').textContent = 'Lograste mantener algunas flores vivas';
+            } else {
+                document.getElementById('titulo-fin').textContent = '🍂 Aprenderás 🍂';
+                document.getElementById('mensaje-fin').textContent = 'La jardinería requiere paciencia y atención';
+            }
+
+            setTimeout(() => {
+                document.getElementById('modal-fin').style.display = 'flex';
+            }, 1000);
+        }
+
+        // 🍃 PARTÍCULAS AMBIENTALES
+        setInterval(() => {
+            let p = document.createElement("div");
+            p.style.position = 'fixed';
+            p.style.pointerEvents = 'none';
+            p.style.fontSize = '30px';
+            p.textContent = ['🍃', '🌿', '🌾'][Math.floor(Math.random() * 3)];
+            p.style.left = Math.random() * window.innerWidth + 'px';
+            p.style.top = '-50px';
+            p.style.opacity = '0.6';
+            p.style.zIndex = '10';
+            document.body.appendChild(p);
+
+            let x = Math.random() * window.innerWidth;
+            let animate = () => {
+                p.style.top = window.innerHeight + 'px';
+                p.style.opacity = '0';
+                p.style.transform = 'translateX(' + (x - parseInt(p.style.left)) + 'px)';
+                setTimeout(() => p.remove(), 8000);
+            };
+            setTimeout(animate, 10);
+        }, 2000);
+    </script>
+</body>
+</html>
