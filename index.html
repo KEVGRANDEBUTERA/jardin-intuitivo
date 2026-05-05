@@ -244,6 +244,36 @@
             color: white;
         }
 
+        /* 🌸 BOTÓN REINICIAR FLOR */
+        .btn-reiniciar-flor {
+            width: 70px;
+            height: 70px;
+            border: none;
+            border-radius: 50%;
+            font-size: 32px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #66bb6a, #81c784);
+            color: white;
+            border: 2px solid #ffffff;
+        }
+
+        .btn-reiniciar-flor:hover {
+            transform: scale(1.15);
+            box-shadow: 0 8px 20px rgba(102, 187, 106, 0.5);
+        }
+
+        .btn-reiniciar-flor:active {
+            transform: scale(0.95);
+        }
+
         /* 🍃 PARTÍCULAS */
         .particula {
             position: fixed;
@@ -326,6 +356,22 @@
             font-weight: bold;
             font-size: 12px;
             color: #81c784;
+        }
+
+        .instrucciones .separador {
+            border-top: 1px solid rgba(102, 187, 106, 0.3);
+            margin: 10px 0;
+        }
+
+        .instrucciones .reiniciar-info {
+            background: rgba(102, 187, 106, 0.2);
+            padding: 8px;
+            border-radius: 8px;
+            margin-top: 8px;
+            font-size: 12px;
+            color: #81c784;
+            font-weight: bold;
+            text-align: center;
         }
 
         /* 🌾 FIN DE JUEGO */
@@ -447,6 +493,12 @@
                 font-size: 26px;
             }
 
+            .btn-reiniciar-flor {
+                width: 65px;
+                height: 65px;
+                font-size: 28px;
+            }
+
             .controles-intuitivos {
                 gap: 12px;
                 padding: 12px 20px;
@@ -502,6 +554,12 @@
                 width: 58px;
                 height: 58px;
                 font-size: 24px;
+            }
+
+            .btn-reiniciar-flor {
+                width: 58px;
+                height: 58px;
+                font-size: 26px;
             }
 
             .controles-intuitivos {
@@ -577,6 +635,12 @@
                 min-width: 50px;
                 min-height: 50px;
                 box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            }
+
+            .btn-reiniciar-flor {
+                width: 50px;
+                height: 50px;
+                font-size: 22px;
             }
 
             .controles-intuitivos {
@@ -699,6 +763,10 @@
                 <span>🤚 Caricia:</span>
                 <span class="puntos">+3</span>
             </div>
+            <div class="separador"></div>
+            <div class="reiniciar-info">
+                🌸 Botón Reiniciar
+            </div>
         </div>
     </div>
 
@@ -708,6 +776,7 @@
         <button class="btn-accion btn-sol" onclick="accion('sol')" title="Sol">☀️</button>
         <button class="btn-accion btn-abono" onclick="accion('abono')" title="Abono">🌿</button>
         <button class="btn-accion btn-caricia" onclick="accion('caricia')" title="Caricia">🤚</button>
+        <button class="btn-reiniciar-flor" onclick="location.reload()" title="Reiniciar Juego">🌸</button>
     </div>
 
     <!-- ALERTA -->
@@ -726,7 +795,7 @@
                     <strong id="puntuacion-final">🏆 0 pts</strong>
                 </p>
             </div>
-            <button class="btn-reiniciar" onclick="location.reload()">🔄 Jugar</button>
+            <button class="btn-reiniciar" onclick="location.reload()">🔄 Jugar de Nuevo</button>
         </div>
     </div>
 
