@@ -279,27 +279,53 @@
             border-color: #ff4444 !important;
             animation: temblequeo 0.1s infinite !important;
             font-size: 32px !important;
+            padding: 40px 50px !important;
         }
 
-        /* 🎙️ INSTRUCCIONES */
+        /* 🎙️ INSTRUCCIONES - MÁS GRANDE */
         .instrucciones {
             position: fixed;
             bottom: 115px;
             right: 20px;
-            background: rgba(0,0,0,0.8);
-            color: white;
-            padding: 12px 15px;
-            border-radius: 12px;
-            font-size: 13px;
-            max-width: 200px;
-            border: 2px solid #66bb6a;
+            background: rgba(0,0,0,0.9);
+            color: #66bb6a;
+            padding: 18px 22px;
+            border-radius: 15px;
+            font-size: 14px;
+            max-width: 280px;
+            border: 3px solid #66bb6a;
             z-index: 50;
-            line-height: 1.5;
+            line-height: 1.8;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
         }
 
         .instrucciones strong {
             display: block;
-            margin-bottom: 6px;
+            margin-bottom: 10px;
+            font-size: 16px;
+            color: white;
+            text-align: center;
+        }
+
+        .instrucciones p {
+            margin: 6px 0;
+            font-size: 13px;
+        }
+
+        .instrucciones .boton-info {
+            display: flex;
+            align-items: center;
+            margin: 8px 0;
+            gap: 8px;
+        }
+
+        .instrucciones .puntos {
+            background: rgba(102, 187, 106, 0.3);
+            padding: 3px 10px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 12px;
+            color: #81c784;
         }
 
         /* 🌾 FIN DE JUEGO */
@@ -400,10 +426,6 @@
                 font-size: 38px;
             }
 
-            .login-box p {
-                font-size: 14px;
-            }
-
             #hud {
                 padding: 12px 20px;
                 gap: 12px;
@@ -430,32 +452,23 @@
                 padding: 12px 20px;
             }
 
-            .alerta {
-                font-size: 20px;
-                padding: 25px 30px;
-            }
-
             .alerta.muerte {
                 font-size: 26px !important;
+                padding: 30px 40px !important;
             }
 
             .instrucciones {
-                font-size: 12px;
-                padding: 10px 12px;
-                bottom: 100px;
-                right: 15px;
+                font-size: 13px;
+                padding: 15px 18px;
+                max-width: 260px;
+            }
+
+            .instrucciones strong {
+                font-size: 15px;
             }
 
             .modal-contenido h1 {
                 font-size: 36px;
-            }
-
-            .modal-contenido p {
-                font-size: 16px;
-            }
-
-            .modal-stats p {
-                font-size: 14px;
             }
         }
 
@@ -498,21 +511,26 @@
                 border-radius: 25px;
             }
 
-            .alerta {
-                font-size: 18px;
-                padding: 20px 25px;
-            }
-
             .alerta.muerte {
                 font-size: 22px !important;
+                padding: 25px 35px !important;
             }
 
             .instrucciones {
+                font-size: 12px;
+                padding: 14px 16px;
+                bottom: 100px;
+                right: 15px;
+                max-width: 240px;
+            }
+
+            .instrucciones strong {
+                font-size: 14px;
+                margin-bottom: 8px;
+            }
+
+            .instrucciones .boton-info {
                 font-size: 11px;
-                padding: 9px 11px;
-                bottom: 95px;
-                right: 12px;
-                max-width: 160px;
             }
 
             .modal-contenido {
@@ -524,26 +542,6 @@
                 font-size: 32px;
                 margin-bottom: 12px;
             }
-
-            .modal-contenido p {
-                font-size: 15px;
-            }
-
-            .modal-stats {
-                padding: 12px;
-                margin: 15px 0;
-            }
-
-            .modal-stats p {
-                font-size: 13px;
-                margin: 8px 0;
-            }
-
-            .btn-reiniciar {
-                padding: 12px 30px;
-                font-size: 15px;
-                margin-top: 15px;
-            }
         }
 
         @media (max-width: 480px) {
@@ -554,11 +552,6 @@
 
             .login-box h1 {
                 font-size: 32px;
-            }
-
-            .login-box p {
-                font-size: 13px;
-                margin-bottom: 20px;
             }
 
             #hud {
@@ -593,27 +586,34 @@
                 border-radius: 20px;
             }
 
-            .alerta {
-                font-size: 16px;
-                padding: 18px 20px;
-            }
-
             .alerta.muerte {
                 font-size: 20px !important;
+                padding: 20px 30px !important;
             }
 
             .instrucciones {
-                font-size: 10px;
-                padding: 8px 10px;
-                bottom: 80px;
+                font-size: 11px;
+                padding: 12px 14px;
+                bottom: 85px;
                 right: 10px;
-                max-width: 140px;
-                border-radius: 10px;
+                max-width: 200px;
+                border-radius: 12px;
             }
 
             .instrucciones strong {
-                margin-bottom: 4px;
+                font-size: 12px;
+                margin-bottom: 6px;
+            }
+
+            .instrucciones .boton-info {
                 font-size: 10px;
+                margin: 5px 0;
+                gap: 6px;
+            }
+
+            .instrucciones .puntos {
+                font-size: 11px;
+                padding: 2px 8px;
             }
 
             .modal-contenido {
@@ -628,12 +628,6 @@
 
             .modal-contenido p {
                 font-size: 14px;
-                margin: 10px 0;
-            }
-
-            .modal-stats {
-                padding: 10px;
-                margin: 12px 0;
             }
 
             .modal-stats p {
@@ -688,10 +682,23 @@
 
         <!-- INSTRUCCIONES -->
         <div class="instrucciones">
-            <strong>💡 Tips:</strong>
-            • Toca las flores<br>
-            • Usa los botones<br>
-            • Mantén vivas tus flores
+            <strong>💡 PUNTOS POR ACCIÓN</strong>
+            <div class="boton-info">
+                <span>💧 Agua:</span>
+                <span class="puntos">+15</span>
+            </div>
+            <div class="boton-info">
+                <span>☀️ Sol:</span>
+                <span class="puntos">+8</span>
+            </div>
+            <div class="boton-info">
+                <span>🌿 Abono:</span>
+                <span class="puntos">+25</span>
+            </div>
+            <div class="boton-info">
+                <span>🤚 Caricia:</span>
+                <span class="puntos">+3</span>
+            </div>
         </div>
     </div>
 
@@ -732,8 +739,7 @@
         let tiempoInicio = 0;
         let intervaloTiempo = null;
         let juegoActivo = true;
-        let tiempoGuardado = 0; // ✅ VARIABLE PARA GUARDAR EL TIEMPO
-        let juegoTerminado = false; // ✅ BANDERA PARA EVITAR DUPLICADOS
+        let tiempoGuardado = 0;
 
         // 🎵 SONIDOS
         function crearSonido(tipo) {
@@ -773,18 +779,16 @@
             }
         }
 
-        // ⏱️ FUNCIÓN DE TIEMPO MEJORADA
+        // ⏱️ FUNCIÓN DE TIEMPO
         function iniciarTiempo() {
             intervaloTiempo = setInterval(() => {
-                // Solo actualizar si el juego está activo
-                if(juegoActivo && !juegoTerminado) {
+                if(juegoActivo) {
                     let elapsed = Math.floor((Date.now() - tiempoInicio) / 1000);
                     let min = Math.floor(elapsed / 60);
                     let seg = elapsed % 60;
                     document.getElementById('tiempo-juego').textContent = 
                         min + ':' + (seg < 10 ? '0' : '') + seg;
                     
-                    // Guardar el tiempo en cada actualización
                     tiempoGuardado = elapsed;
                 }
             }, 1000);
@@ -865,12 +869,10 @@
                     barraAncho: barraAncho
                 });
             }
-
-            console.log("✅ Jardín creado:", flores.length, "flores");
         }
 
         function update() {
-            if (!escena || !juegoActivo || juegoTerminado) return;
+            if (!escena || !juegoActivo) return;
 
             flores.forEach(f => {
                 if(!f.muerta) {
@@ -891,22 +893,31 @@
                     f.obj.setScale(escala);
                     f.obj.setAlpha(0.4 + (f.salud / 100) * 0.6);
 
+                    // ✅ CUANDO BARRA LLEGA A 0
                     if(f.salud <= 0 && !f.muerta) {
                         f.muerta = true;
                         f.obj.setTint(0x888888);
+                        
+                        // ✅ DETENER TIEMPO INMEDIATAMENTE
+                        juegoActivo = false;
+                        clearInterval(intervaloTiempo);
+                        document.getElementById('controles').style.display = 'none';
+                        
+                        // ✅ MOSTRAR ALERTA GRANDE Y ROJA
                         mostrarAlertaMuerte(f.nombre);
                         actualizarFloresVivas();
                         
-                        if(contarFloresVivas() === 0) {
-                            terminarJuego();
-                        }
+                        // ✅ MOSTRAR MODAL DESPUÉS DE 2 SEGUNDOS
+                        setTimeout(() => {
+                            mostrarResultados();
+                        }, 2000);
                     }
                 }
             });
         }
 
         function accion(tipo) {
-            if(!juegoActivo || juegoTerminado) return;
+            if(!juegoActivo) return;
 
             crearSonido(tipo);
             
@@ -939,12 +950,13 @@
             setTimeout(() => { alerta.style.display = 'none'; }, 600);
         }
 
+        // ✅ ALERTA DE MUERTE CON TEMBLEQUEO
         function mostrarAlertaMuerte(nombreFlor) {
             let alerta = document.getElementById('alerta');
             alerta.classList.add('muerte');
             alerta.innerHTML = `💀 ${nombreFlor} ha marchitado...`;
             alerta.style.display = 'block';
-            setTimeout(() => { alerta.style.display = 'none'; }, 1200);
+            setTimeout(() => { alerta.style.display = 'none'; }, 1800);
         }
 
         function crearParticula(tipo) {
@@ -971,30 +983,8 @@
             document.getElementById('flores-vivas').textContent = contarFloresVivas();
         }
 
-        // ✅ FUNCIÓN MEJORADA PARA TERMINAR EL JUEGO
-        function terminarJuego() {
-            // ✅ DETENER TODO INMEDIATAMENTE
-            juegoActivo = false;
-            juegoTerminado = true;
-            
-            // ✅ LIMPIAR INTERVALOS
-            if(intervaloTiempo) {
-                clearInterval(intervaloTiempo);
-                intervaloTiempo = null;
-            }
-            
-            // ✅ OCULTAR CONTROLES
-            document.getElementById('controles').style.display = 'none';
-            
-            // ✅ ESPERAR 1.5 SEGUNDOS PARA LA ANIMACIÓN Y LUEGO MOSTRAR MODAL
-            setTimeout(() => {
-                mostrarResultados();
-            }, 1500);
-        }
-
-        // ✅ FUNCIÓN PARA MOSTRAR RESULTADOS
+        // ✅ MOSTRAR RESULTADOS FINALES
         function mostrarResultados() {
-            // Calcular estadísticas
             let min = Math.floor(tiempoGuardado / 60);
             let seg = tiempoGuardado % 60;
             let tiempoFormato = min + ':' + (seg < 10 ? '0' : '') + seg;
@@ -1002,13 +992,11 @@
             let floresVivas = contarFloresVivas();
             let puntuacion = (floresVivas * 500) + Math.floor(tiempoGuardado / 10);
 
-            // Llenar modal
             document.getElementById('stat-1').textContent = '🌸 Flores: ' + floresVivas + ' / 3';
             document.getElementById('stat-2').textContent = '⏱️ Tiempo: ' + tiempoFormato;
             document.getElementById('stat-3').textContent = '💚 Conexión: ' + Math.floor(estado.energia) + '%';
             document.getElementById('puntuacion-final').textContent = '🏆 ' + puntuacion + ' pts';
 
-            // Mensajes finales
             if(floresVivas === 3) {
                 document.getElementById('titulo-fin').textContent = '🌟 ¡GANASTE! 🌟';
                 document.getElementById('mensaje-fin').textContent = '✨ Eres un MAESTRO del jardín ✨';
@@ -1020,10 +1008,7 @@
                 document.getElementById('mensaje-fin').textContent = 'Todas tus flores marchitaron 💀';
             }
 
-            // Mostrar modal
             document.getElementById('modal-fin').style.display = 'flex';
-
-            console.log("✅ JUEGO TERMINADO - Tiempo guardado:", tiempoGuardado);
         }
 
         // 🍃 PARTÍCULAS AMBIENTALES
@@ -1033,7 +1018,7 @@
             p.style.pointerEvents = 'none';
             p.style.fontSize = '20px';
             p.style.opacity = '0.7';
-            p.textContent = ['🍃', '🌿', '🌸'][Math.floor(Math.random() * 3)];
+            p.textContent = ['🍃', '🌿', '🌾'][Math.floor(Math.random() * 3)];
             p.style.left = Math.random() * window.innerWidth + 'px';
             p.style.top = '-40px';
             p.style.zIndex = '5';
