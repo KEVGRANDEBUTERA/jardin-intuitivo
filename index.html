@@ -618,6 +618,14 @@
             }, 1000);
         }
 
+        // ⏹️ DETENER TIEMPO
+        function detenerTiempo() {
+            if(intervaloTiempo) {
+                clearInterval(intervaloTiempo);
+                intervaloTiempo = null;
+            }
+        }
+
         function iniciarPhaser() {
             const ancho = window.innerWidth;
             const alto = window.innerHeight - 120;
@@ -719,6 +727,7 @@
                         f.muerta = true;
                         f.obj.setTint(0x888888);
                         JUEGO_PAUSADO = true;  // ✅ PAUSA TODO
+                        detenerTiempo();  // ✅ DETENER TIEMPO
                         document.getElementById('controles').style.display = 'none';
                         mostrarAlertaMuerte(f.nombre);
                         actualizarFloresVivas();
