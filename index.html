@@ -21,7 +21,6 @@
             position: relative;
         }
 
-        /* 🌸 PANTALLA LOGIN */
         #pantalla-login {
             position: fixed; 
             width: 100%; 
@@ -110,7 +109,6 @@
             box-shadow: 0 8px 20px rgba(46, 125, 50, 0.5);
         }
 
-        /* 🎮 JUEGO */
         #juego-contenedor {
             display: none;
             width: 100%;
@@ -122,7 +120,6 @@
             z-index: 2;
         }
 
-        /* 📊 HUD - INFORMACIÓN */
         #hud {
             background: rgba(0,0,0,0.3);
             padding: 15px 30px;
@@ -153,7 +150,6 @@
             white-space: nowrap;
         }
 
-        /* 🌿 ÁREA DE JUEGO */
         #game-container {
             flex: 1;
             width: 100%;
@@ -164,7 +160,6 @@
             min-height: 200px;
         }
 
-        /* 🎨 CONTROLES INTUITIVOS */
         .controles-intuitivos {
             position: fixed;
             bottom: 30px;
@@ -223,7 +218,6 @@
             transform: scale(0.95);
         }
 
-        /* Colores únicos */
         .btn-agua {
             background: linear-gradient(135deg, #1976d2, #42a5f5);
             color: white;
@@ -244,7 +238,6 @@
             color: white;
         }
 
-        /* 🌸 BOTÓN REINICIAR FLOR */
         .btn-reiniciar-flor {
             width: 70px;
             height: 70px;
@@ -274,7 +267,6 @@
             transform: scale(0.95);
         }
 
-        /* 🍃 PARTÍCULAS */
         .particula {
             position: fixed;
             pointer-events: none;
@@ -284,7 +276,6 @@
             z-index: 50;
         }
 
-        /* ⚠️ ALERTA */
         .alerta {
             position: fixed;
             top: 50%;
@@ -312,7 +303,6 @@
             padding: 40px 50px !important;
         }
 
-        /* 🎙️ INSTRUCCIONES - MÁS GRANDE */
         .instrucciones {
             position: fixed;
             bottom: 115px;
@@ -335,11 +325,6 @@
             font-size: 16px;
             color: white;
             text-align: center;
-        }
-
-        .instrucciones p {
-            margin: 6px 0;
-            font-size: 13px;
         }
 
         .instrucciones .boton-info {
@@ -374,7 +359,6 @@
             text-align: center;
         }
 
-        /* 🌾 FIN DE JUEGO */
         #modal-fin {
             display: none;
             position: fixed;
@@ -406,6 +390,13 @@
         .modal-contenido h1 {
             font-size: 44px;
             margin-bottom: 15px;
+        }
+
+        .modal-contenido h2 {
+            font-size: 18px;
+            color: #81c784;
+            margin-bottom: 20px;
+            font-style: italic;
         }
 
         .modal-contenido p {
@@ -466,250 +457,25 @@
             to { opacity: 1; }
         }
 
-        /* 📱 RESPONSIVE MÓVIL */
-        @media (max-width: 1024px) {
-            .login-box h1 {
-                font-size: 38px;
-            }
-
-            #hud {
-                padding: 12px 20px;
-                gap: 12px;
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .hud-item {
-                font-size: 14px;
-            }
-
-            .hud-item span {
-                padding: 5px 12px;
-                font-size: 12px;
-            }
-
-            .btn-accion {
-                width: 65px;
-                height: 65px;
-                font-size: 26px;
-            }
-
-            .btn-reiniciar-flor {
-                width: 65px;
-                height: 65px;
-                font-size: 28px;
-            }
-
-            .controles-intuitivos {
-                gap: 12px;
-                padding: 12px 20px;
-            }
-
-            .alerta.muerte {
-                font-size: 26px !important;
-                padding: 30px 40px !important;
-            }
-
-            .instrucciones {
-                font-size: 13px;
-                padding: 15px 18px;
-                max-width: 260px;
-            }
-
-            .instrucciones strong {
-                font-size: 15px;
-            }
-
-            .modal-contenido h1 {
-                font-size: 36px;
-            }
-        }
-
         @media (max-width: 768px) {
-            .login-box {
-                padding: 35px 25px;
-            }
-
-            .login-box h1 {
-                font-size: 36px;
-            }
-
-            #hud {
-                padding: 10px 15px;
-                gap: 10px;
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .hud-item {
-                font-size: 13px;
-                flex-direction: column;
-                gap: 4px;
-            }
-
-            .hud-item span {
-                padding: 4px 10px;
-                font-size: 11px;
-            }
-
-            .btn-accion {
-                width: 58px;
-                height: 58px;
-                font-size: 24px;
-            }
-
-            .btn-reiniciar-flor {
-                width: 58px;
-                height: 58px;
-                font-size: 26px;
-            }
-
-            .controles-intuitivos {
-                bottom: 25px;
-                gap: 10px;
-                padding: 10px 18px;
-                border-radius: 25px;
-            }
-
-            .alerta.muerte {
-                font-size: 22px !important;
-                padding: 25px 35px !important;
-            }
-
-            .instrucciones {
-                font-size: 12px;
-                padding: 14px 16px;
-                bottom: 100px;
-                right: 15px;
-                max-width: 240px;
-            }
-
-            .instrucciones strong {
-                font-size: 14px;
-                margin-bottom: 8px;
-            }
-
-            .instrucciones .boton-info {
-                font-size: 11px;
-            }
-
-            .modal-contenido {
-                padding: 30px 20px;
-                border-radius: 15px;
-            }
-
-            .modal-contenido h1 {
-                font-size: 32px;
-                margin-bottom: 12px;
-            }
+            .btn-accion { width: 58px; height: 58px; font-size: 24px; }
+            .btn-reiniciar-flor { width: 58px; height: 58px; font-size: 26px; }
+            .instrucciones { font-size: 12px; padding: 14px 16px; bottom: 100px; right: 15px; max-width: 240px; }
+            .modal-contenido h1 { font-size: 32px; margin-bottom: 12px; }
+            .modal-contenido h2 { font-size: 15px; }
         }
 
         @media (max-width: 480px) {
-            .login-box {
-                padding: 30px 20px;
-                border-radius: 15px;
-            }
-
-            .login-box h1 {
-                font-size: 32px;
-            }
-
-            #hud {
-                padding: 8px 12px;
-                gap: 8px;
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .hud-item {
-                font-size: 11px;
-                gap: 3px;
-            }
-
-            .hud-item span {
-                padding: 3px 8px;
-                font-size: 10px;
-            }
-
-            .btn-accion {
-                width: 50px;
-                height: 50px;
-                font-size: 20px;
-                min-width: 50px;
-                min-height: 50px;
-                box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-            }
-
-            .btn-reiniciar-flor {
-                width: 50px;
-                height: 50px;
-                font-size: 22px;
-            }
-
-            .controles-intuitivos {
-                bottom: 20px;
-                gap: 8px;
-                padding: 8px 15px;
-                border-radius: 20px;
-            }
-
-            .alerta.muerte {
-                font-size: 20px !important;
-                padding: 20px 30px !important;
-            }
-
-            .instrucciones {
-                font-size: 11px;
-                padding: 12px 14px;
-                bottom: 85px;
-                right: 10px;
-                max-width: 200px;
-                border-radius: 12px;
-            }
-
-            .instrucciones strong {
-                font-size: 12px;
-                margin-bottom: 6px;
-            }
-
-            .instrucciones .boton-info {
-                font-size: 10px;
-                margin: 5px 0;
-                gap: 6px;
-            }
-
-            .instrucciones .puntos {
-                font-size: 11px;
-                padding: 2px 8px;
-            }
-
-            .modal-contenido {
-                padding: 25px 15px;
-                border-radius: 12px;
-            }
-
-            .modal-contenido h1 {
-                font-size: 28px;
-                margin-bottom: 10px;
-            }
-
-            .modal-contenido p {
-                font-size: 14px;
-            }
-
-            .modal-stats p {
-                font-size: 12px;
-                margin: 6px 0;
-            }
-
-            .btn-reiniciar {
-                padding: 10px 25px;
-                font-size: 14px;
-                margin-top: 12px;
-            }
+            .btn-accion { width: 50px; height: 50px; font-size: 20px; }
+            .btn-reiniciar-flor { width: 50px; height: 50px; font-size: 22px; }
+            .instrucciones { font-size: 11px; padding: 12px 14px; bottom: 85px; right: 10px; max-width: 200px; }
+            .modal-contenido h1 { font-size: 28px; margin-bottom: 10px; }
+            .modal-contenido h2 { font-size: 13px; margin-bottom: 15px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- 🌸 LOGIN -->
     <div id="pantalla-login">
         <div class="login-container">
             <div class="login-box">
@@ -723,9 +489,7 @@
         </div>
     </div>
 
-    <!-- 🌿 JUEGO -->
     <div id="juego-contenedor">
-        <!-- HUD -->
         <div id="hud">
             <div class="hud-item">
                 👨‍🌾 <span id="nombre-jugador">Jardinero</span>
@@ -741,10 +505,8 @@
             </div>
         </div>
 
-        <!-- JUEGO -->
         <div id="game-container"></div>
 
-        <!-- INSTRUCCIONES -->
         <div class="instrucciones">
             <strong>💡 PUNTOS POR ACCIÓN</strong>
             <div class="boton-info">
@@ -770,7 +532,6 @@
         </div>
     </div>
 
-    <!-- CONTROLES INTUITIVOS -->
     <div class="controles-intuitivos" id="controles">
         <button class="btn-accion btn-agua" onclick="accion('agua')" title="Regar">💧</button>
         <button class="btn-accion btn-sol" onclick="accion('sol')" title="Sol">☀️</button>
@@ -779,18 +540,17 @@
         <button class="btn-reiniciar-flor" onclick="location.reload()" title="Reiniciar Juego">🌸</button>
     </div>
 
-    <!-- ALERTA -->
     <div class="alerta" id="alerta"></div>
 
-    <!-- MODAL FIN -->
     <div id="modal-fin">
         <div class="modal-contenido">
             <h1 id="titulo-fin">🌾 Fin del Viaje 🌾</h1>
+            <h2>✨ Experiencia Sensorial Intuitivo ✨</h2>
             <p id="mensaje-fin">Tu jardín ha descansado...</p>
             <div class="modal-stats">
-                <p id="stat-1">Flores: 0</p>
-                <p id="stat-2">Tiempo: 0:00</p>
-                <p id="stat-3">Conexión: 0%</p>
+                <p id="stat-1">🌸 Flores: 0 / 3</p>
+                <p id="stat-2">⏱️ Tiempo: 0:00</p>
+                <p id="stat-3">💚 Conexión: 0%</p>
                 <p style="font-size: 22px; margin-top: 12px; color: #81c784;">
                     <strong id="puntuacion-final">🏆 0 pts</strong>
                 </p>
@@ -800,15 +560,16 @@
     </div>
 
     <script>
-        // ====================== VARIABLES GLOBALES ======================
+        // ==================== CONTROL PRINCIPAL ====================
+        let JUEGO_PAUSADO = false;
+        let TIEMPO_FINAL = 0;
+        
         let nombreJugador = '';
         let flores = [];
         let escena = null;
         let estado = { agua: 0, sol: 0, abono: 0, caricia: 0, energia: 100 };
         let tiempoInicio = 0;
         let intervaloTiempo = null;
-        let juegoActivo = true;
-        let tiempoGuardado = 0;
 
         // 🎵 SONIDOS
         function crearSonido(tipo) {
@@ -816,20 +577,15 @@
                 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
                 const oscilador = audioContext.createOscillator();
                 const ganancia = audioContext.createGain();
-                
                 oscilador.connect(ganancia);
                 ganancia.connect(audioContext.destination);
-                
                 ganancia.gain.setValueAtTime(0.1, audioContext.currentTime);
                 ganancia.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
-
                 const frecuencias = { agua: 800, sol: 1200, abono: 600, caricia: 900 };
                 oscilador.frequency.value = frecuencias[tipo] || 800;
                 oscilador.start(audioContext.currentTime);
                 oscilador.stop(audioContext.currentTime + 0.3);
-            } catch(e) {
-                console.log("Audio no disponible");
-            }
+            } catch(e) {}
         }
 
         function entrarAlJardin() {
@@ -848,17 +604,16 @@
             }
         }
 
-        // ⏱️ FUNCIÓN DE TIEMPO
+        // ⏱️ TIEMPO - CONTROLADO
         function iniciarTiempo() {
             intervaloTiempo = setInterval(() => {
-                if(juegoActivo) {
+                if(!JUEGO_PAUSADO) {
                     let elapsed = Math.floor((Date.now() - tiempoInicio) / 1000);
                     let min = Math.floor(elapsed / 60);
                     let seg = elapsed % 60;
                     document.getElementById('tiempo-juego').textContent = 
                         min + ':' + (seg < 10 ? '0' : '') + seg;
-                    
-                    tiempoGuardado = elapsed;
+                    TIEMPO_FINAL = elapsed;
                 }
             }, 1000);
         }
@@ -866,7 +621,6 @@
         function iniciarPhaser() {
             const ancho = window.innerWidth;
             const alto = window.innerHeight - 120;
-
             const config = {
                 type: Phaser.AUTO,
                 parent: 'game-container',
@@ -897,7 +651,6 @@
             for(let i = 0; i < 3; i++) {
                 let x = (ancho / 2) - separation + (i * separation);
                 let y = centerY;
-
                 let container = this.add.container(x, y);
                 
                 let tallo = this.add.rectangle(0, 0, stemWidth, stemHeight, 0x388e3c).setOrigin(0.5, 1);
@@ -922,7 +675,6 @@
                 let barraVida = this.add.rectangle(-barraAncho/2, 65, barraAncho, barraAltura, 0x66bb6a).setOrigin(0, 0.5);
                 
                 container.add([tallo, hoja1, hoja2, flor, centro, texto, barraFondo, barraVida]);
-
                 flor.setInteractive();
                 flor.on('pointerdown', () => accion('caricia'));
 
@@ -941,7 +693,7 @@
         }
 
         function update() {
-            if (!escena || !juegoActivo) return;
+            if (!escena || JUEGO_PAUSADO) return;
 
             flores.forEach(f => {
                 if(!f.muerta) {
@@ -962,41 +714,25 @@
                     f.obj.setScale(escala);
                     f.obj.setAlpha(0.4 + (f.salud / 100) * 0.6);
 
-                    // ✅ CUANDO BARRA LLEGA A 0
+                    // ✅✅✅ CUANDO LLEGA A 0
                     if(f.salud <= 0 && !f.muerta) {
                         f.muerta = true;
                         f.obj.setTint(0x888888);
-                        
-                        // ✅ DETENER TIEMPO INMEDIATAMENTE
-                        juegoActivo = false;
-                        clearInterval(intervaloTiempo);
+                        JUEGO_PAUSADO = true;  // ✅ PAUSA TODO
                         document.getElementById('controles').style.display = 'none';
-                        
-                        // ✅ MOSTRAR ALERTA GRANDE Y ROJA
                         mostrarAlertaMuerte(f.nombre);
                         actualizarFloresVivas();
-                        
-                        // ✅ MOSTRAR MODAL DESPUÉS DE 2 SEGUNDOS
-                        setTimeout(() => {
-                            mostrarResultados();
-                        }, 2000);
+                        setTimeout(() => { mostrarResultados(); }, 2000);
                     }
                 }
             });
         }
 
         function accion(tipo) {
-            if(!juegoActivo) return;
+            if(JUEGO_PAUSADO) return;
 
             crearSonido(tipo);
-            
-            const mensajes = {
-                agua: '💧 ¡Refrescante!',
-                sol: '☀️ ¡Energía vital!',
-                abono: '🌿 ¡Nutrientes!',
-                caricia: '❤️ ¡Amor!'
-            };
-
+            const mensajes = { agua: '💧 ¡Refrescante!', sol: '☀️ ¡Energía vital!', abono: '🌿 ¡Nutrientes!', caricia: '❤️ ¡Amor!' };
             mostrarAlerta(mensajes[tipo]);
 
             flores.forEach(f => { 
@@ -1007,7 +743,6 @@
                     if(tipo === 'caricia') f.salud += 3;
                 }
             });
-
             crearParticula(tipo);
         }
 
@@ -1019,7 +754,6 @@
             setTimeout(() => { alerta.style.display = 'none'; }, 600);
         }
 
-        // ✅ ALERTA DE MUERTE CON TEMBLEQUEO
         function mostrarAlertaMuerte(nombreFlor) {
             let alerta = document.getElementById('alerta');
             alerta.classList.add('muerte');
@@ -1052,15 +786,16 @@
             document.getElementById('flores-vivas').textContent = contarFloresVivas();
         }
 
-        // ✅ MOSTRAR RESULTADOS FINALES
+        // ✅✅✅ MOSTRAR RESULTADOS
         function mostrarResultados() {
-            let min = Math.floor(tiempoGuardado / 60);
-            let seg = tiempoGuardado % 60;
+            let min = Math.floor(TIEMPO_FINAL / 60);
+            let seg = TIEMPO_FINAL % 60;
             let tiempoFormato = min + ':' + (seg < 10 ? '0' : '') + seg;
 
             let floresVivas = contarFloresVivas();
-            let puntuacion = (floresVivas * 500) + Math.floor(tiempoGuardado / 10);
+            let puntuacion = (floresVivas * 500) + Math.floor(TIEMPO_FINAL / 10);
 
+            // ✅ LLENAR TODO
             document.getElementById('stat-1').textContent = '🌸 Flores: ' + floresVivas + ' / 3';
             document.getElementById('stat-2').textContent = '⏱️ Tiempo: ' + tiempoFormato;
             document.getElementById('stat-3').textContent = '💚 Conexión: ' + Math.floor(estado.energia) + '%';
@@ -1077,10 +812,11 @@
                 document.getElementById('mensaje-fin').textContent = 'Todas tus flores marchitaron 💀';
             }
 
+            // ✅ MOSTRAR MODAL
             document.getElementById('modal-fin').style.display = 'flex';
         }
 
-        // 🍃 PARTÍCULAS AMBIENTALES
+        // 🍃 PARTÍCULAS
         setInterval(() => {
             let p = document.createElement("div");
             p.style.position = 'fixed';
