@@ -303,6 +303,14 @@
             padding: 40px 50px !important;
         }
 
+        .alerta.tiempo {
+            background: rgba(0, 100, 200, 0.95) !important;
+            border-color: #44ccff !important;
+            animation: popIn 0.4s ease-out !important;
+            font-size: 28px !important;
+            padding: 40px 50px !important;
+        }
+
         .instrucciones {
             position: fixed;
             bottom: 115px;
@@ -570,6 +578,8 @@
         let estado = { agua: 0, sol: 0, abono: 0, caricia: 0, energia: 100 };
         let tiempoInicio = 0;
         let intervaloTiempo = null;
+        let tiempoLimite = 60; // 1 minuto en segundos
+        let tiempoYaLimitado = false; // Bandera para evitar múltiples disparos
 
         // 🎵 SONIDOS
         function crearSonido(tipo) {
@@ -614,6 +624,12 @@
                     document.getElementById('tiempo-juego').textContent = 
                         min + ':' + (seg < 10 ? '0' : '') + seg;
                     TIEMPO_FINAL = elapsed;
+
+                    // ⏱️ VERIFICAR SI PASÓ 1 MINUTO
+                    if(elapsed >= tiempoLimite && !tiempoYaLimitado) {
+                        tiempoYaLimitado = true;
+                        pausarJuegoPorTiempo();
+                    }
                 }
             }, 1000);
         }
@@ -624,6 +640,34 @@
                 clearInterval(intervaloTiempo);
                 intervaloTiempo = null;
             }
+        }
+
+        // ⏱️ PAUSA POR TIEMPO
+        function pausarJuegoPorTiempo() {
+            JUEGO_PAUSADO = true;
+            detenerTiempo();
+            document.getElementById('controles').style.display = 'none';
+            
+            let floresVivas = contarFloresVivas();
+            
+            // Mostrar mensaje
+            let alerta = document.getElementById('alerta');
+            alerta.classList.add('tiempo');
+            alerta.classList.remove('muerte');
+            
+            if(floresVivas === 3) {
+                alerta.innerHTML = `⏱️ ¡Se acabó el tiempo! 🌟 Todas florecieron 🌟`;
+            } else if(floresVivas > 0) {
+                alerta.innerHTML = `⏱️ ¡Se acabó el tiempo! 🌸 ${floresVivas} flores sobrevivieron`;
+            } else {
+                alerta.innerHTML = `⏱️ ¡Se acabó el tiempo! 💀 Todas marchitaron`;
+            }
+            alerta.style.display = 'block';
+            
+            setTimeout(() => { 
+                alerta.style.display = 'none';
+                mostrarResultados(); 
+            }, 2500);
         }
 
         function iniciarPhaser() {
@@ -722,12 +766,12 @@
                     f.obj.setScale(escala);
                     f.obj.setAlpha(0.4 + (f.salud / 100) * 0.6);
 
-                    // ✅✅✅ CUANDO LLEGA A 0
+                    // ✅ CUANDO LLEGA A 0
                     if(f.salud <= 0 && !f.muerta) {
                         f.muerta = true;
                         f.obj.setTint(0x888888);
-                        JUEGO_PAUSADO = true;  // ✅ PAUSA TODO
-                        detenerTiempo();  // ✅ DETENER TIEMPO
+                        JUEGO_PAUSADO = true;
+                        detenerTiempo();
                         document.getElementById('controles').style.display = 'none';
                         mostrarAlertaMuerte(f.nombre);
                         actualizarFloresVivas();
@@ -758,6 +802,7 @@
         function mostrarAlerta(texto) {
             let alerta = document.getElementById('alerta');
             alerta.classList.remove('muerte');
+            alerta.classList.remove('tiempo');
             alerta.innerHTML = texto;
             alerta.style.display = 'block';
             setTimeout(() => { alerta.style.display = 'none'; }, 600);
@@ -766,6 +811,7 @@
         function mostrarAlertaMuerte(nombreFlor) {
             let alerta = document.getElementById('alerta');
             alerta.classList.add('muerte');
+            alerta.classList.remove('tiempo');
             alerta.innerHTML = `💀 ${nombreFlor} ha marchitado...`;
             alerta.style.display = 'block';
             setTimeout(() => { alerta.style.display = 'none'; }, 1800);
@@ -795,7 +841,7 @@
             document.getElementById('flores-vivas').textContent = contarFloresVivas();
         }
 
-        // ✅✅✅ MOSTRAR RESULTADOS
+        // ✅ MOSTRAR RESULTADOS
         function mostrarResultados() {
             let min = Math.floor(TIEMPO_FINAL / 60);
             let seg = TIEMPO_FINAL % 60;
