@@ -426,6 +426,49 @@
             margin: 10px 0;
         }
 
+        .perfil-sensorial {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin: 20px 0;
+            border: 2px solid #81c784;
+            animation: popIn 0.6s ease-out;
+        }
+
+        .perfil-titulo {
+            font-size: 28px;
+            margin-bottom: 10px;
+            font-weight: bold;
+            color: #81c784;
+        }
+
+        .perfil-subtitulo {
+            font-size: 16px;
+            color: #b8e6c0;
+            margin-bottom: 12px;
+            font-style: italic;
+        }
+
+        .accion-favorita {
+            background: rgba(102, 187, 106, 0.3);
+            padding: 12px;
+            border-radius: 10px;
+            margin-top: 12px;
+            font-size: 15px;
+            color: #81c784;
+            border-left: 4px solid #81c784;
+        }
+
+        .consejo {
+            background: rgba(255, 202, 40, 0.1);
+            padding: 12px;
+            border-radius: 10px;
+            margin-top: 12px;
+            font-size: 14px;
+            color: #fdd835;
+            border-left: 4px solid #fdd835;
+        }
+
         .btn-reiniciar {
             background: linear-gradient(135deg, #66bb6a, #81c784);
             color: white;
@@ -471,6 +514,7 @@
             .instrucciones { font-size: 12px; padding: 14px 16px; bottom: 100px; right: 15px; max-width: 240px; }
             .modal-contenido h1 { font-size: 32px; margin-bottom: 12px; }
             .modal-contenido h2 { font-size: 15px; }
+            .perfil-titulo { font-size: 24px; }
         }
 
         @media (max-width: 480px) {
@@ -479,6 +523,7 @@
             .instrucciones { font-size: 11px; padding: 12px 14px; bottom: 85px; right: 10px; max-width: 200px; }
             .modal-contenido h1 { font-size: 28px; margin-bottom: 10px; }
             .modal-contenido h2 { font-size: 13px; margin-bottom: 15px; }
+            .perfil-titulo { font-size: 20px; }
         }
     </style>
 </head>
@@ -563,6 +608,15 @@
                     <strong id="puntuacion-final">🏆 0 pts</strong>
                 </p>
             </div>
+
+            <!-- PERFIL SENSORIAL -->
+            <div class="perfil-sensorial" id="perfil-sensorial">
+                <div class="perfil-titulo" id="perfil-titulo"></div>
+                <div class="perfil-subtitulo" id="perfil-subtitulo"></div>
+                <div class="accion-favorita" id="accion-favorita"></div>
+                <div class="consejo" id="consejo"></div>
+            </div>
+
             <button class="btn-reiniciar" onclick="location.reload()">🔄 Jugar de Nuevo</button>
         </div>
     </div>
@@ -578,8 +632,11 @@
         let estado = { agua: 0, sol: 0, abono: 0, caricia: 0, energia: 100 };
         let tiempoInicio = 0;
         let intervaloTiempo = null;
-        let tiempoLimite = 60; // 1 minuto en segundos
-        let tiempoYaLimitado = false; // Bandera para evitar múltiples disparos
+        let tiempoLimite = 60;
+        let tiempoYaLimitado = false;
+        
+        // Contador de acciones para perfil
+        let contadorAcciones = { agua: 0, sol: 0, abono: 0, caricia: 0 };
 
         // 🎵 SONIDOS
         function crearSonido(tipo) {
@@ -650,7 +707,6 @@
             
             let floresVivas = contarFloresVivas();
             
-            // Mostrar mensaje
             let alerta = document.getElementById('alerta');
             alerta.classList.add('tiempo');
             alerta.classList.remove('muerte');
@@ -784,6 +840,9 @@
         function accion(tipo) {
             if(JUEGO_PAUSADO) return;
 
+            // ✅ CONTAR ACCIONES PARA PERFIL
+            contadorAcciones[tipo]++;
+
             crearSonido(tipo);
             const mensajes = { agua: '💧 ¡Refrescante!', sol: '☀️ ¡Energía vital!', abono: '🌿 ¡Nutrientes!', caricia: '❤️ ¡Amor!' };
             mostrarAlerta(mensajes[tipo]);
@@ -841,6 +900,43 @@
             document.getElementById('flores-vivas').textContent = contarFloresVivas();
         }
 
+        // ✅ CALCULAR PERFIL SENSORIAL
+        function calcularPerfilSensorial(puntuacion) {
+            let perfil = {};
+            
+            // Encontrar acción favorita
+            let acciones = Object.keys(contadorAcciones);
+            let accionFavorita = acciones.reduce((a, b) => 
+                contadorAcciones[a] > contadorAcciones[b] ? a : b
+            );
+            
+            // Emojis de acciones
+            const emojisAcciones = { agua: '💧', sol: '☀️', abono: '🌿', caricia: '❤️' };
+            const nombresAcciones = { agua: 'Agua', sol: 'Sol', abono: 'Abono', caricia: 'Caricia' };
+
+            if(puntuacion >= 2500) {
+                perfil.tipo = '🌟 INTUITIVO PURO 🌟';
+                perfil.descripcion = 'Actúas por puro instinto, sin calcular. Tu conexión con la naturaleza es innata.';
+                perfil.consejo = '💡 Consejo: Mantén esa espontaneidad natural, ¡es tu mayor fortaleza!';
+            } else if(puntuacion >= 1500) {
+                perfil.tipo = '💧 SENSORIAL ACTIVO 💧';
+                perfil.descripcion = 'Equilibrio perfecto entre sentidos y acción. Eres reflexivo pero decidido.';
+                perfil.consejo = '💡 Consejo: Esa capacidad de equilibrio te hace un excelente cuidador.';
+            } else if(puntuacion >= 500) {
+                perfil.tipo = '❤️ SENSORIAL EMOCIONAL ❤️';
+                perfil.descripcion = 'Presta mucha atención a los detalles. Tu empatía es tu brújula.';
+                perfil.consejo = '💡 Consejo: Confia más en tu intuición, ¡ya estás en el camino correcto!';
+            } else {
+                perfil.tipo = '🌱 APRENDIZ 🌱';
+                perfil.descripcion = 'Estás explorando, descubriendo. Cada experiencia te acerca más a la naturaleza.';
+                perfil.consejo = '💡 Consejo: ¡No te desanimes! El aprendizaje es el mejor maestro.';
+            }
+
+            perfil.accionFavorita = `✨ Tu sentido dominante: ${emojisAcciones[accionFavorita]} ${nombresAcciones[accionFavorita]} (usada ${contadorAcciones[accionFavorita]} veces)`;
+
+            return perfil;
+        }
+
         // ✅ MOSTRAR RESULTADOS
         function mostrarResultados() {
             let min = Math.floor(TIEMPO_FINAL / 60);
@@ -850,7 +946,7 @@
             let floresVivas = contarFloresVivas();
             let puntuacion = (floresVivas * 500) + Math.floor(TIEMPO_FINAL / 10);
 
-            // ✅ LLENAR TODO
+            // ✅ LLENAR STATS
             document.getElementById('stat-1').textContent = '🌸 Flores: ' + floresVivas + ' / 3';
             document.getElementById('stat-2').textContent = '⏱️ Tiempo: ' + tiempoFormato;
             document.getElementById('stat-3').textContent = '💚 Conexión: ' + Math.floor(estado.energia) + '%';
@@ -866,6 +962,13 @@
                 document.getElementById('titulo-fin').textContent = '🍂 PERDISTE 🍂';
                 document.getElementById('mensaje-fin').textContent = 'Todas tus flores marchitaron 💀';
             }
+
+            // ✅ MOSTRAR PERFIL SENSORIAL
+            let perfil = calcularPerfilSensorial(puntuacion);
+            document.getElementById('perfil-titulo').textContent = perfil.tipo;
+            document.getElementById('perfil-subtitulo').textContent = perfil.descripcion;
+            document.getElementById('accion-favorita').innerHTML = perfil.accionFavorita;
+            document.getElementById('consejo').innerHTML = perfil.consejo;
 
             // ✅ MOSTRAR MODAL
             document.getElementById('modal-fin').style.display = 'flex';
